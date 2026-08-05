@@ -9,6 +9,7 @@ import pl.cryptotax.domain.service.NbpClient;
 import pl.cryptotax.infrastructure.nbp.dto.NbpResponse;
 import pl.cryptotax.infrastructure.nbp.exception.NbpClientException;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -58,11 +59,14 @@ public class NbpHttpClient implements NbpClient {
                 } else {
                     throw new NbpClientException("Unexpected NBP API status code: " + response.statusCode());
                 }
-            } catch (Exception e) {
-                throw new NbpClientException("Error during communication with NBP API", e);
+            } catch (IOException e) {
+                throw new NbpClientException("Error during communication or JSON mapping with NBP API", e);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new NbpClientException("Thread was interrupted while waiting for NBP API response", e);
             }
         }
 
-        throw new IllegalStateException("Could not find NBP exchange rate for " + currency + " after " + maxAttempts + " attempts before " + effectiveDate);
+        throw new NbpClientException("Could not find NBP exchange rate for " + currency + " after " + maxAttempts + " attempts before " + effectiveDate);
     }
 }
