@@ -1,5 +1,6 @@
 package pl.cryptotax.infrastructure.csv;
 
+import org.springframework.stereotype.Component;
 import pl.cryptotax.domain.model.RawTransactionRow;
 import pl.cryptotax.domain.model.TransactionType;
 import pl.cryptotax.domain.port.TransactionFileParser;
@@ -13,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 
+@Component
 public class CsvTransactionParser implements TransactionFileParser {
 
     @Override
