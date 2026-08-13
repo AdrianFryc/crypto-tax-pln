@@ -27,15 +27,13 @@ public class CsvTransactionParser implements TransactionFileParser {
 
     @Override
     public List<RawTransactionRow> parse(InputStream inputStream) {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines()
                     .skip(1)
                     .filter(line -> !line.isBlank())
                     .map(line -> {
                         String[] fields = line.split(",");
-                        return new RawTransactionRow(fields[0], new BigDecimal(fields[1]), new BigDecimal(fields[2]), new BigDecimal(fields[3]), TransactionType.valueOf(fields[4].trim().toUpperCase()), Instant.parse(fields[5].trim()));
+                        return new RawTransactionRow(fields[0].trim(), new BigDecimal(fields[1]), new BigDecimal(fields[2]), new BigDecimal(fields[3]), TransactionType.valueOf(fields[4].trim().toUpperCase()), Instant.parse(fields[5].trim()));
                     }).toList();
         } catch (IOException e) {
             throw new RuntimeException("Error reading CSV file", e);
