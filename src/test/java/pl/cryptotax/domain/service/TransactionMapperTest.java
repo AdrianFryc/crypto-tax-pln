@@ -33,7 +33,7 @@ public class TransactionMapperTest {
     void shouldMapRawTransactionRowToCryptoTransaction() {
         // given
         Instant now = Instant.now();
-        RawTransactionRow rawTransactionRow = new RawTransactionRow("BTC/USD", new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("2"),TransactionType.BUY, now);
+        RawTransactionRow rawTransactionRow = new RawTransactionRow("BTC/USD", new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("2"), new BigDecimal("0"), TransactionType.BUY, now);
 
         // Mokujemy TYLKO zależność (pairParser)
         Mockito.when(pairParser.parse("BTC/USD"))
@@ -65,7 +65,7 @@ public class TransactionMapperTest {
     void shouldReturnEmptyWhenPairParsingFails(){
         // given
         Instant now = Instant.now();
-        RawTransactionRow rawTransactionRow = new RawTransactionRow("BTC/USDD", new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("2"),TransactionType.BUY, now);
+        RawTransactionRow rawTransactionRow = new RawTransactionRow("BTC/USDD", new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("2"), new BigDecimal("0"),TransactionType.BUY, now);
 
         Mockito.when(pairParser.parse("BTC/USDD")).thenReturn(Optional.empty());
 

@@ -33,7 +33,7 @@ public class CsvTransactionParser implements TransactionFileParser {
                     .filter(line -> !line.isBlank())
                     .map(line -> {
                         String[] fields = line.split(",");
-                        return new RawTransactionRow(fields[0].trim(), new BigDecimal(fields[1]), new BigDecimal(fields[2]), new BigDecimal(fields[3]), TransactionType.valueOf(fields[4].trim().toUpperCase()), Instant.parse(fields[5].trim()));
+                        return new RawTransactionRow(fields[0].trim(), new BigDecimal(fields[1]), new BigDecimal(fields[2]), new BigDecimal(fields[3]), new BigDecimal(fields[4]),TransactionType.valueOf(fields[5].trim().toUpperCase()), Instant.parse(fields[6].trim()));
                     }).toList();
         } catch (IOException e) {
             throw new RuntimeException("Error reading CSV file", e);

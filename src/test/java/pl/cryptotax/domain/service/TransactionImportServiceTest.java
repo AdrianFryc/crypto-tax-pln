@@ -11,6 +11,7 @@ import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.domain.model.RawTransactionRow;
 import pl.cryptotax.domain.model.TransactionType;
 import pl.cryptotax.domain.port.TransactionFileParser;
+import pl.cryptotax.domain.port.TransactionRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -31,11 +32,14 @@ public class TransactionImportServiceTest {
     @Mock
     private TransactionFileParser transactionFileParser;
 
+    @Mock
+    private TransactionRepository transactionRepository;
+
     private TransactionImportService transactionImportService;
 
     @BeforeEach
     void setUp() {
-        transactionImportService = new TransactionImportService(List.of(transactionFileParser), transactionMapper);
+        transactionImportService = new TransactionImportService(List.of(transactionFileParser), transactionMapper, transactionRepository);
     }
 
     @Test
@@ -43,16 +47,20 @@ public class TransactionImportServiceTest {
         // Arrange
         String fileName = "transactions.csv";
         InputStream inputStream = new ByteArrayInputStream(new byte[0]);
-        RawTransactionRow rawTransactionRow = new RawTransactionRow("", new BigDecimal(0), new BigDecimal(0), new BigDecimal(0), TransactionType.BUY, Instant.now());
+        RawTransactionRow rawTransactionRow = new RawTransactionRow("", new BigDecimal(0), new BigDecimal(0), new BigDecimal(0), new BigDecimal(0),TransactionType.BUY, Instant.now());
         CryptoTransaction cryptoTransaction = new CryptoTransaction(UUID.randomUUID(), "BTC", new BigDecimal(1), new BigDecimal(2), new BigDecimal(2), "USD", TransactionType.BUY, Instant.now());
 
         Mockito.when(transactionFileParser.canParse(fileName)).thenReturn(true);
         Mockito.when(transactionFileParser.parse(inputStream)).thenReturn(List.of(rawTransactionRow));
         Mockito.when(transactionMapper.map(rawTransactionRow)).thenReturn(Optional.of(cryptoTransaction));
+        Mockito.when(transactionRepository.saveAll(List.of(cryptoTransaction)))
+                .thenReturn(List.of(cryptoTransaction));
         // Act
         List<CryptoTransaction> result = transactionImportService.importTransactions(fileName, inputStream);
         // Assert
         assertThat(result).hasSize(1).containsExactly(cryptoTransaction);
+
+        Mockito.verify(transactionRepository, Mockito.times(1)).saveAll(List.of(cryptoTransaction));
     }
 
     @Test
