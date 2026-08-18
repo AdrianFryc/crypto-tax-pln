@@ -43,4 +43,12 @@ public class TransactionDatabaseAdapter implements TransactionRepository {
                 .map(entityMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public List<CryptoTransaction> findAll() {
+        var transactions = jpaRepository.findAll();
+        return transactions.stream()
+                .map(entityMapper::toDomain)
+                .toList();
+    }
 }

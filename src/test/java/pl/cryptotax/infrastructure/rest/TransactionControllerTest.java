@@ -46,7 +46,7 @@ public class TransactionControllerTest {
         );
 
         CryptoTransaction cryptoTransaction = new CryptoTransaction(
-                UUID.randomUUID(), "BTC", BigDecimal.ONE, BigDecimal.TWO, BigDecimal.TWO, "PLN", TransactionType.BUY, Instant.now()
+                UUID.randomUUID(), "BTC", BigDecimal.ONE, BigDecimal.TWO, BigDecimal.TWO, null,"PLN", TransactionType.BUY, Instant.now()
         );
 
         Mockito.when(transactionImportService.importTransactions(eq("transactions.csv"), any()))

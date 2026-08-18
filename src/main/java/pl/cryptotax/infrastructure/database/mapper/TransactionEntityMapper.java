@@ -5,17 +5,19 @@ import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.infrastructure.database.entity.TransactionEntity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Component
 public class TransactionEntityMapper {
 
     public TransactionEntity toEntity(CryptoTransaction domain) {
         return new TransactionEntity(
+                domain.transactionId(),
                 domain.cryptoSymbol(),
                 domain.cryptoAmount(),
                 domain.fiatRate(),
                 domain.fiatAmount(),
-                BigDecimal.ZERO, // Domyślna prowizja 0, jeśli CryptoTransaction jej nie ma
+                domain.fee(),
                 domain.transactionType(),
                 domain.transactionDate()
         );
@@ -28,6 +30,7 @@ public class TransactionEntityMapper {
                 entity.getAmount(),
                 entity.getPrice(),
                 entity.getAmount().multiply(entity.getPrice()),
+                entity.getFee(),
                 entity.getSymbol(),
                 entity.getType(),
                 entity.getTimestamp()

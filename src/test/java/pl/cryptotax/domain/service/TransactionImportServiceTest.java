@@ -48,7 +48,7 @@ public class TransactionImportServiceTest {
         String fileName = "transactions.csv";
         InputStream inputStream = new ByteArrayInputStream(new byte[0]);
         RawTransactionRow rawTransactionRow = new RawTransactionRow("", new BigDecimal(0), new BigDecimal(0), new BigDecimal(0), new BigDecimal(0),TransactionType.BUY, Instant.now());
-        CryptoTransaction cryptoTransaction = new CryptoTransaction(UUID.randomUUID(), "BTC", new BigDecimal(1), new BigDecimal(2), new BigDecimal(2), "USD", TransactionType.BUY, Instant.now());
+        CryptoTransaction cryptoTransaction = new CryptoTransaction(UUID.randomUUID(), "BTC", new BigDecimal(1), new BigDecimal(2), new BigDecimal(2), null,"USD", TransactionType.BUY, Instant.now());
 
         Mockito.when(transactionFileParser.canParse(fileName)).thenReturn(true);
         Mockito.when(transactionFileParser.parse(inputStream)).thenReturn(List.of(rawTransactionRow));

@@ -12,7 +12,6 @@ import java.util.UUID;
 public class TransactionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false)
@@ -40,7 +39,8 @@ public class TransactionEntity {
     protected TransactionEntity() {
     }
 
-    public TransactionEntity(String symbol, BigDecimal amount, BigDecimal price, BigDecimal fiatRate, BigDecimal fee, TransactionType type, Instant timestamp) {
+    public TransactionEntity(UUID id, String symbol, BigDecimal amount, BigDecimal price, BigDecimal fiatRate, BigDecimal fee, TransactionType type, Instant timestamp) {
+        this.id = id;
         this.symbol = symbol;
         this.amount = amount;
         this.price = price;
