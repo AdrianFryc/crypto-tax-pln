@@ -8,8 +8,6 @@ import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "pl.cryptotax.infrastructure.database.repository")
-@EntityScan(basePackages = "pl.cryptotax.infrastructure.database.entity")
 public class CryptoTaxPlnApplication {
 
 	public static void main(String[] args) {
