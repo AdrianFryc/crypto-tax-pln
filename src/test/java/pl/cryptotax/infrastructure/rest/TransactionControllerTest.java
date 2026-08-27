@@ -116,4 +116,30 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.fiatAmount").value(50000.0))
                 .andExpect(jsonPath("$.transactionType").value("BUY"));
     }
+
+    @Test
+    public void shouldReturn400BadRequestWhenCryptoAmountIsInvalid() throws Exception {
+        // given
+        String requestJson = """
+            {
+                "cryptoSymbol": "BTC",
+                "cryptoAmount": -100.0,
+                "price": 50000.0,
+                "fee": 10.0,
+                "fiatCurrency": "PLN",
+                "transactionType": "BUY",
+                "transactionDate": "2026-08-21T12:00:00Z"
+            }
+            """;
+
+        mockMvc.perform(post("/api/v1/transactions")
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Validation failed"))
+                .andExpect(jsonPath("$.path").value("/api/v1/transactions"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("cryptoAmount")));
+
+    }
 }
