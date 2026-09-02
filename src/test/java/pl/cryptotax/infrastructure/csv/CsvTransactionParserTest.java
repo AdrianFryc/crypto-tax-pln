@@ -20,13 +20,13 @@ public class CsvTransactionParserTest {
     private InputStream inputStream;
 
     private static final String csvContent = """
-        tradingPair,amount,price,fiatRate,transactionType,transactionDate
-        BTC/USD,0.5,40000.00,40000.00,BUY,2024-01-15T10:15:30Z
-        """;
+    tradingPair,amount,price,fiatRate,fee,transactionType,transactionDate
+    BTC/USD,0.5,40000.00,40000.00,0.00,BUY,2024-01-15T10:15:30Z
+    """;
 
     private static final String csvContentHeaderOnly = """
-        tradingPair,amount,price,fiatRate,transactionType,transactionDate
-        """;
+    tradingPair,amount,price,fiatRate,fee,transactionType,transactionDate
+    """;
 
     @BeforeEach
     void setUp() {
