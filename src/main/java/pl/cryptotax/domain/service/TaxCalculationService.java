@@ -2,13 +2,15 @@ package pl.cryptotax.domain.service;
 
 import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.domain.model.TaxSummary;
+import pl.cryptotax.domain.model.TransactionType;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
 public class TaxCalculationService {
-
+    private static final ZoneId WARSAW_ZONE = ZoneId.of("Europe/Warsaw");
     private final NbpClient nbpClient;
 
     public TaxCalculationService(NbpClient nbpClient) {
@@ -16,22 +18,43 @@ public class TaxCalculationService {
     }
 
     public TaxSummary calculateTax(List<CryptoTransaction> transactions){
-        BigDecimal totalIncome = new BigDecimal(0);
-        BigDecimal totalCost = new BigDecimal(0);
-        BigDecimal netProfitPln = new BigDecimal(0);
+        if (transactions == null || transactions.isEmpty()) {
+            return new TaxSummary(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalCost = BigDecimal.ZERO;
+        BigDecimal netProfitPln = BigDecimal.ZERO;
 
-//        transactions.forEach(transaction -> {
-//            var trasnactionDate = transaction.transactionDate().atZone(ZoneId.of("Europe/Warsaw")).toLocalDate();
-//            if(transaction.fiatCurrency().contains("PLN")){
-//
-//            }else{
-//
-//            }
-//            var exchangeRate = nbpClient.getExchangeRate(transaction.fiatCurrency(), trasnactionDate);
-//        });
+        for (CryptoTransaction transaction : transactions) {
+            LocalDate txDate = transaction.transactionDate()
+                    .atZone(WARSAW_ZONE)
+                    .toLocalDate();
 
+            // 1. Prowizja (fee) to zawsze koszt KUP dla obu typów transakcji
+            BigDecimal feeInPln = convertToPln(transaction.fee(), transaction.fiatCurrency(), txDate);
+            totalCost = totalCost.add(feeInPln);
 
+            // 2. Wartość transakcji
+            BigDecimal amountInPln = convertToPln(transaction.fiatAmount(), transaction.fiatCurrency(), txDate);
 
-        return null;
+            if (transaction.transactionType() == TransactionType.BUY) {
+                totalCost = totalCost.add(amountInPln);
+            } else if (transaction.transactionType() == TransactionType.SELL) {
+                totalIncome = totalIncome.add(amountInPln);
+            }
+        }
+        netProfitPln = totalIncome.subtract(totalCost);
+        return new TaxSummary(totalIncome, totalCost, netProfitPln);
+    }
+
+    private BigDecimal convertToPln(BigDecimal amount, String currency, LocalDate date) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
+        }
+        if ("PLN".equalsIgnoreCase(currency)) {
+            return amount;
+        }
+        BigDecimal rate = nbpClient.getExchangeRate(currency, date).rate();
+        return amount.multiply(rate);
     }
 }
