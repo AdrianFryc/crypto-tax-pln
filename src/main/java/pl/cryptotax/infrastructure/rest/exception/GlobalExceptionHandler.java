@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import pl.cryptotax.domain.exception.InvalidTaxYearException;
 import pl.cryptotax.infrastructure.rest.dto.ErrorResponseDto;
 
 import java.time.Instant;
@@ -25,4 +26,15 @@ public class GlobalExceptionHandler {
         return new ErrorResponseDto(timestamp, status, error, message, path);
     }
 
+    @ExceptionHandler(InvalidTaxYearException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleInvalidTaxYearException(InvalidTaxYearException ex, HttpServletRequest request){
+        var path = request.getRequestURI();
+        var timestamp = Instant.now();
+        var status = HttpStatus.BAD_REQUEST.value();
+        var error = "Validation failed";
+        var message = ex.getMessage();
+
+        return new ErrorResponseDto(timestamp, status, error, message, path);
+    }
 }

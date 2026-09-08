@@ -7,6 +7,7 @@ import pl.cryptotax.infrastructure.database.entity.TransactionEntity;
 import pl.cryptotax.infrastructure.database.mapper.TransactionEntityMapper;
 import pl.cryptotax.infrastructure.database.repository.TransactionJpaRepository;
 
+import java.time.Instant;
 import java.util.List;
 
 @Repository
@@ -47,6 +48,14 @@ public class TransactionDatabaseAdapter implements TransactionRepository {
     @Override
     public List<CryptoTransaction> findAll() {
         var transactions = jpaRepository.findAll();
+        return transactions.stream()
+                .map(entityMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<CryptoTransaction> findAllByTransactionDateBetween(Instant start, Instant end) {
+        var transactions = jpaRepository.findAllByTransactionDateBetween(start, end);
         return transactions.stream()
                 .map(entityMapper::toDomain)
                 .toList();
