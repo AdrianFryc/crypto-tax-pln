@@ -14,6 +14,7 @@ public class TransactionEntityMapper {
         return new TransactionEntity(
                 domain.transactionId(),
                 domain.cryptoSymbol(),
+                domain.fiatCurrency(),
                 domain.cryptoAmount(),
                 domain.fiatRate(),
                 domain.fiatAmount(),
@@ -26,12 +27,12 @@ public class TransactionEntityMapper {
     public CryptoTransaction toDomain(TransactionEntity entity) {
         return new CryptoTransaction(
                 entity.getId(),
-                entity.getSymbol(),
+                entity.getCryptoSymbol(),
+                entity.getFiatCurrency(),
                 entity.getAmount(),
                 entity.getPrice(),
                 entity.getAmount().multiply(entity.getPrice()),
                 entity.getFee(),
-                entity.getSymbol(),
                 entity.getType(),
                 entity.getTimestamp()
         );

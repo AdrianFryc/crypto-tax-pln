@@ -13,11 +13,11 @@ public class TransactionRestMapper {
         return new CryptoTransaction(
                 UUID.randomUUID(),
                 dto.cryptoSymbol(),
+                dto.fiatCurrency(),
                 dto.cryptoAmount(),
                 dto.price(),
                 dto.cryptoAmount().multiply(dto.price()),
                 dto.fee(),
-                dto.fiatCurrency(),
                 dto.transactionType(),
                 dto.transactionDate()
         );
