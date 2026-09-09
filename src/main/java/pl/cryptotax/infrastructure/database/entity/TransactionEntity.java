@@ -15,7 +15,10 @@ public class TransactionEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String symbol;
+    private String cryptoSymbol;
+
+    @Column(nullable = false)
+    private String fiatCurrency;
 
     @Column(nullable = false, precision = 18, scale = 8)
     private BigDecimal amount;
@@ -39,9 +42,10 @@ public class TransactionEntity {
     protected TransactionEntity() {
     }
 
-    public TransactionEntity(UUID id, String symbol, BigDecimal amount, BigDecimal price, BigDecimal fiatRate, BigDecimal fee, TransactionType type, Instant timestamp) {
+    public TransactionEntity(UUID id, String cryptoSymbol, String fiatCurrency, BigDecimal amount, BigDecimal price, BigDecimal fiatRate, BigDecimal fee, TransactionType type, Instant timestamp) {
         this.id = id;
-        this.symbol = symbol;
+        this.cryptoSymbol = cryptoSymbol;
+        this.fiatCurrency = fiatCurrency;
         this.amount = amount;
         this.price = price;
         this.fiatRate = fiatRate;
@@ -99,12 +103,20 @@ public class TransactionEntity {
         this.amount = amount;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getCryptoSymbol() {
+        return cryptoSymbol;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setCryptoSymbol(String cryptoSymbol) {
+        this.cryptoSymbol = cryptoSymbol;
+    }
+
+    public String getFiatCurrency() {
+        return fiatCurrency;
+    }
+
+    public void setFiatCurrency(String fiatCurrency) {
+        this.fiatCurrency = fiatCurrency;
     }
 
     public UUID getId() {

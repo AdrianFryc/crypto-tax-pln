@@ -27,11 +27,11 @@ import java.util.UUID;
 
 public record CryptoTransaction(UUID transactionId,
                                 String cryptoSymbol,
+                                String fiatCurrency,
                                 BigDecimal cryptoAmount,
                                 BigDecimal fiatRate,
                                 BigDecimal fiatAmount,
                                 BigDecimal fee,
-                                String fiatCurrency,
                                 TransactionType transactionType,
                                 Instant transactionDate) {
     public CryptoTransaction {

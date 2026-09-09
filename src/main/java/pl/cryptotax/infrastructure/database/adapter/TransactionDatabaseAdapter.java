@@ -55,7 +55,7 @@ public class TransactionDatabaseAdapter implements TransactionRepository {
 
     @Override
     public List<CryptoTransaction> findAllByTransactionDateBetween(Instant start, Instant end) {
-        var transactions = jpaRepository.findAllByTransactionDateBetween(start, end);
+        var transactions = jpaRepository.findAllByTimestampBetween(start, end);
         return transactions.stream()
                 .map(entityMapper::toDomain)
                 .toList();

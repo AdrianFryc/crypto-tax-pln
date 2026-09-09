@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionJpaRepository extends JpaRepository<TransactionEntity, UUID> {
-    List<TransactionEntity> findAllByTransactionDateBetween(Instant start, Instant end);
+    List<TransactionEntity> findAllByTimestampBetween(Instant start, Instant end);
 }

@@ -24,11 +24,11 @@ public class TransactionMapper {
                     return new CryptoTransaction(
                             UUID.randomUUID(),           // 1. transactionId
                             pair.cryptoSymbol(),          // 2. cryptoSymbol (akcesor z ())
+                            pair.fiatCurrency(),          // 5. fiatCurrency (akcesor z ())
                             rawRow.cryptoAmount(),              // 3. cryptoAmount
                             rawRow.fiatRate(),
                             fiatAmount,                   // 4. fiatAmount
                             rawRow.fee(),
-                            pair.fiatCurrency(),          // 5. fiatCurrency (akcesor z ())
                             rawRow.transactionType(),     // 6. transactionType
                             rawRow.transactionDate()      // 7. transactionDate
                     );
