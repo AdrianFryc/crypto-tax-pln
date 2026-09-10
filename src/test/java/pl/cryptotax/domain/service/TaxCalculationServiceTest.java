@@ -9,6 +9,7 @@ import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.domain.model.ExchangeRate;
 import pl.cryptotax.domain.model.TaxSummary;
 import pl.cryptotax.domain.model.TransactionType;
+import pl.cryptotax.infrastructure.nbp.exception.NbpClientException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -53,23 +55,23 @@ class TaxCalculationServiceTest {
         List<CryptoTransaction> transactions = List.of(
                 new CryptoTransaction(
                         UUID.randomUUID(),
-                        "BTC/PLN",
-                        BigDecimal.valueOf(0.5),
-                        BigDecimal.valueOf(40000.00),
-                        BigDecimal.valueOf(20000.00),
-                        BigDecimal.valueOf(10.00),
+                        "BTC",
                         "PLN",
+                        new BigDecimal("0.5"),
+                        new BigDecimal("40000.00"),
+                        new BigDecimal("20000.00"),
+                        new BigDecimal("10.00"),
                         TransactionType.BUY,
                         Instant.parse("2024-01-15T10:15:30Z")
                 ),
                 new CryptoTransaction(
                         UUID.randomUUID(),
                         "BTC/PLN",
-                        BigDecimal.valueOf(0.1),
-                        BigDecimal.valueOf(30000.00),
-                        BigDecimal.valueOf(3000.00),
-                        BigDecimal.valueOf(2.00),
                         "PLN",
+                        new BigDecimal("0.1"),
+                        new BigDecimal("30000.00"),
+                        new BigDecimal("3000.00"),
+                        new BigDecimal("2.00"),
                         TransactionType.SELL,
                         Instant.parse("2024-01-17T10:15:30Z")
                 )
@@ -95,23 +97,23 @@ class TaxCalculationServiceTest {
         List<CryptoTransaction> transactions = List.of(
                 new CryptoTransaction(
                         UUID.randomUUID(),
-                        "BTC/USD",
-                        BigDecimal.valueOf(1.0),
-                        BigDecimal.valueOf(100.00),
-                        BigDecimal.valueOf(100.00), // 100 USD * 4.00 = 400 PLN
-                        BigDecimal.valueOf(2.00),   // 2 USD * 4.00 = 8 PLN
+                        "BTC",
                         "USD",
+                        new BigDecimal("1.0"),
+                        new BigDecimal("100.00"),
+                        new BigDecimal("100.00"), // 100 USD * 4.00 = 400 PLN
+                        new BigDecimal("2.00"),   // 2 USD * 4.00 = 8 PLN
                         TransactionType.BUY,
                         Instant.parse("2024-01-15T10:15:30Z")
                 ),
                 new CryptoTransaction(
                         UUID.randomUUID(),
-                        "BTC/USD",
-                        BigDecimal.valueOf(1.0),
-                        BigDecimal.valueOf(200.00),
-                        BigDecimal.valueOf(200.00), // 200 USD * 4.00 = 800 PLN
-                        BigDecimal.valueOf(5.00),   // 5 USD * 4.00 = 20 PLN
+                        "BTC",
                         "USD",
+                        new BigDecimal("1.0"),
+                        new BigDecimal("200.00"),
+                        new BigDecimal("200.00"), // 200 USD * 4.00 = 800 PLN
+                        new BigDecimal("5.00"),   // 5 USD * 4.00 = 20 PLN
                         TransactionType.SELL,
                         Instant.parse("2024-01-17T10:15:30Z")
                 )
@@ -125,5 +127,30 @@ class TaxCalculationServiceTest {
         assertThat(result.totalIncome()).isEqualByComparingTo("800.00");
         assertThat(result.totalCost()).isEqualByComparingTo("428.00");
         assertThat(result.netProfitPln()).isEqualByComparingTo("372.00");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenNbpClientFails(){
+        List<CryptoTransaction> transactions = List.of(
+                new CryptoTransaction(
+                        UUID.randomUUID(),
+                        "BTC",
+                        "USD",
+                        new BigDecimal("1.0"),
+                        new BigDecimal("100.00"),
+                        new BigDecimal("100.00"), // 100 USD * 4.00 = 400 PLN
+                        new BigDecimal("2.00"),   // 2 USD * 4.00 = 8 PLN
+                        TransactionType.BUY,
+                        Instant.parse("2024-01-15T10:15:30Z")
+                )
+        );
+
+        when(nbpClient.getExchangeRate(eq("USD"), any()))
+                .thenThrow(new NbpClientException("NBP service unavailable"));
+
+
+        assertThatThrownBy(() -> taxCalculationService.calculateTax(transactions))
+                .isInstanceOf(NbpClientException.class)
+                .hasMessageContaining("NBP service unavailable");
     }
 }
