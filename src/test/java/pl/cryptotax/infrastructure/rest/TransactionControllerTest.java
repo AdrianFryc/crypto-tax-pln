@@ -57,7 +57,7 @@ public class TransactionControllerTest {
         );
 
         CryptoTransaction cryptoTransaction = new CryptoTransaction(
-                UUID.randomUUID(), "BTC", BigDecimal.ONE, BigDecimal.TWO, BigDecimal.TWO, null,"PLN", TransactionType.BUY, Instant.now()
+                UUID.randomUUID(), "BTC", "PLN",BigDecimal.ONE, BigDecimal.TWO, BigDecimal.TWO, null, TransactionType.BUY, Instant.now()
         );
 
         Mockito.when(transactionImportService.importTransactions(eq("transactions.csv"), any()))
@@ -90,8 +90,8 @@ public class TransactionControllerTest {
         Instant now = Instant.parse("2026-08-21T12:00:00Z");
 
         CryptoTransaction mockDomain = new CryptoTransaction(
-                generatedId, "BTC", BigDecimal.ONE, BigDecimal.valueOf(50000.0),
-                BigDecimal.valueOf(50000.0), BigDecimal.valueOf(10.0), "PLN",
+                generatedId, "BTC","PLN", BigDecimal.ONE, BigDecimal.valueOf(50000.0),
+                BigDecimal.valueOf(50000.0), BigDecimal.valueOf(10.0),
                 TransactionType.BUY, now
         );
 

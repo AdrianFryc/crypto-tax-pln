@@ -42,11 +42,11 @@ public class TransactionDatabaseAdapterTest {
     void shouldSaveAndRetrieveTransactionsInRealPostgres() {
         CryptoTransaction cryptoTransaction = new CryptoTransaction(UUID.randomUUID(),
                 "BTC",
+                "PLN",
                 new BigDecimal("0.5"),
                 new BigDecimal("60000.00"),
                 new BigDecimal("10.00"),
                 null,
-                "PLN",
                 TransactionType.BUY,
                 Instant.now()
         );
