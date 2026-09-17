@@ -55,6 +55,7 @@ class TaxCalculationServiceTest {
         List<CryptoTransaction> transactions = List.of(
                 new CryptoTransaction(
                         UUID.randomUUID(),
+                        UUID.randomUUID(),
                         "BTC",
                         "PLN",
                         new BigDecimal("0.5"),
@@ -65,6 +66,7 @@ class TaxCalculationServiceTest {
                         Instant.parse("2024-01-15T10:15:30Z")
                 ),
                 new CryptoTransaction(
+                        UUID.randomUUID(),
                         UUID.randomUUID(),
                         "BTC/PLN",
                         "PLN",
@@ -97,6 +99,7 @@ class TaxCalculationServiceTest {
         List<CryptoTransaction> transactions = List.of(
                 new CryptoTransaction(
                         UUID.randomUUID(),
+                        UUID.randomUUID(),
                         "BTC",
                         "USD",
                         new BigDecimal("1.0"),
@@ -107,6 +110,7 @@ class TaxCalculationServiceTest {
                         Instant.parse("2024-01-15T10:15:30Z")
                 ),
                 new CryptoTransaction(
+                        UUID.randomUUID(),
                         UUID.randomUUID(),
                         "BTC",
                         "USD",
@@ -133,6 +137,7 @@ class TaxCalculationServiceTest {
     public void shouldThrowExceptionWhenNbpClientFails(){
         List<CryptoTransaction> transactions = List.of(
                 new CryptoTransaction(
+                        UUID.randomUUID(),
                         UUID.randomUUID(),
                         "BTC",
                         "USD",

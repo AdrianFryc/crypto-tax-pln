@@ -8,6 +8,7 @@ import pl.cryptotax.domain.port.TransactionRepository;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class TransactionImportService {
 
@@ -22,7 +23,7 @@ public class TransactionImportService {
     }
 
     @Transactional
-    public List<CryptoTransaction> importTransactions(String fileName, InputStream inputStream){
+    public List<CryptoTransaction> importTransactions(String fileName, InputStream inputStream, UUID userId){
 
         var fileParser = parsers.stream()
                 .filter(parser -> parser.canParse(fileName))
@@ -32,7 +33,7 @@ public class TransactionImportService {
         var parsedTransactions = fileParser.parse(inputStream);
 
         var mappedTransactions = parsedTransactions.stream()
-                .map(transactionMapper::map)
+                .map(row -> transactionMapper.map(row, userId))
                 .flatMap(Optional::stream)
                 .toList();
 

@@ -15,16 +15,21 @@ import pl.cryptotax.infrastructure.rest.mapper.TransactionRestMapper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
 public class TransactionController {
 
+    private static final UUID DEFAULT_USER_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
+
     private final TransactionImportService transactionImportService;
     private final TransactionRestMapper transactionRestMapper;
     private final TransactionRepository transactionRepository;
 
-    public TransactionController(TransactionImportService transactionImportService, TransactionRestMapper transactionRestMapper, TransactionRepository transactionRepository) {
+    public TransactionController(TransactionImportService transactionImportService,
+                                 TransactionRestMapper transactionRestMapper,
+                                 TransactionRepository transactionRepository) {
         this.transactionImportService = transactionImportService;
         this.transactionRestMapper = transactionRestMapper;
         this.transactionRepository = transactionRepository;
@@ -40,7 +45,9 @@ public class TransactionController {
         }
 
         String fileName = file.getOriginalFilename();
-        var transactions = transactionImportService.importTransactions(fileName, file.getInputStream());
+
+        // Dodaliśmy DEFAULT_USER_ID jako 3. parametr:
+        var transactions = transactionImportService.importTransactions(fileName, file.getInputStream(), DEFAULT_USER_ID);
         var summary = ImportSummaryResponse.from(transactions);
 
         return ResponseEntity.ok(summary);
@@ -49,7 +56,7 @@ public class TransactionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionResponseDto createTransaction(@Valid @RequestBody CreateTransactionRequestDto dto) {
-        var domain = transactionRestMapper.toDomain(dto);
+        var domain = transactionRestMapper.toDomain(dto, DEFAULT_USER_ID);
         var savedDomain = transactionRepository.save(domain);
 
         return transactionRestMapper.toDto(savedDomain);

@@ -3,9 +3,8 @@ package pl.cryptotax.infrastructure.database.mapper;
 import org.springframework.stereotype.Component;
 import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.infrastructure.database.entity.TransactionEntity;
+import pl.cryptotax.infrastructure.database.entity.UserEntity;
 
-import java.math.BigDecimal;
-import java.util.Objects;
 
 @Component
 public class TransactionEntityMapper {
@@ -13,6 +12,7 @@ public class TransactionEntityMapper {
     public TransactionEntity toEntity(CryptoTransaction domain) {
         return new TransactionEntity(
                 domain.transactionId(),
+                UserEntity.ofId(domain.userId()),
                 domain.cryptoSymbol(),
                 domain.fiatCurrency(),
                 domain.cryptoAmount(),
@@ -27,6 +27,7 @@ public class TransactionEntityMapper {
     public CryptoTransaction toDomain(TransactionEntity entity) {
         return new CryptoTransaction(
                 entity.getId(),
+                entity.getUser().getId(),
                 entity.getCryptoSymbol(),
                 entity.getFiatCurrency(),
                 entity.getAmount(),

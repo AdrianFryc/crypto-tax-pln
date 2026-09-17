@@ -13,7 +13,7 @@ public class TransactionMapper {
         this.pairParser = pairParser;
     }
 
-    public Optional<CryptoTransaction> map(RawTransactionRow rawRow) {
+    public Optional<CryptoTransaction> map(RawTransactionRow rawRow, UUID userId) {
         if (rawRow == null) {
             return Optional.empty();
         }
@@ -23,14 +23,15 @@ public class TransactionMapper {
                     var fiatAmount = rawRow.cryptoAmount().multiply(rawRow.fiatRate());
                     return new CryptoTransaction(
                             UUID.randomUUID(),           // 1. transactionId
-                            pair.cryptoSymbol(),          // 2. cryptoSymbol (akcesor z ())
-                            pair.fiatCurrency(),          // 5. fiatCurrency (akcesor z ())
-                            rawRow.cryptoAmount(),              // 3. cryptoAmount
-                            rawRow.fiatRate(),
-                            fiatAmount,                   // 4. fiatAmount
-                            rawRow.fee(),
-                            rawRow.transactionType(),     // 6. transactionType
-                            rawRow.transactionDate()      // 7. transactionDate
+                            userId,                      // 2. userId
+                            pair.cryptoSymbol(),         // 3. cryptoSymbol
+                            pair.fiatCurrency(),         // 4. fiatCurrency
+                            rawRow.cryptoAmount(),       // 5. cryptoAmount
+                            rawRow.fiatRate(),           // 6. fiatRate
+                            fiatAmount,                  // 7. fiatAmount
+                            rawRow.fee(),                // 8. fee
+                            rawRow.transactionType(),    // 9. transactionType
+                            rawRow.transactionDate()     // 10. transactionDate
                     );
                 });
     }

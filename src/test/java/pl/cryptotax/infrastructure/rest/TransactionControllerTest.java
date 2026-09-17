@@ -57,10 +57,10 @@ public class TransactionControllerTest {
         );
 
         CryptoTransaction cryptoTransaction = new CryptoTransaction(
-                UUID.randomUUID(), "BTC", "PLN",BigDecimal.ONE, BigDecimal.TWO, BigDecimal.TWO, null, TransactionType.BUY, Instant.now()
+                UUID.randomUUID(), UUID.randomUUID(),"BTC", "PLN",BigDecimal.ONE, BigDecimal.TWO, BigDecimal.TWO, null, TransactionType.BUY, Instant.now()
         );
 
-        Mockito.when(transactionImportService.importTransactions(eq("transactions.csv"), any()))
+        Mockito.when(transactionImportService.importTransactions(eq("transactions.csv"), any(), any()))
                 .thenReturn(List.of(cryptoTransaction));
 
         // when & then
@@ -87,10 +87,11 @@ public class TransactionControllerTest {
             """;
 
         UUID generatedId = UUID.randomUUID();
+        UUID generatedUserId = UUID.randomUUID();
         Instant now = Instant.parse("2026-08-21T12:00:00Z");
 
         CryptoTransaction mockDomain = new CryptoTransaction(
-                generatedId, "BTC","PLN", BigDecimal.ONE, BigDecimal.valueOf(50000.0),
+                generatedId, generatedUserId,"BTC","PLN", BigDecimal.ONE, BigDecimal.valueOf(50000.0),
                 BigDecimal.valueOf(50000.0), BigDecimal.valueOf(10.0),
                 TransactionType.BUY, now
         );
@@ -101,7 +102,7 @@ public class TransactionControllerTest {
                 TransactionType.BUY, now
         );
 
-        when(transactionRestMapper.toDomain(any())).thenReturn(mockDomain);
+        when(transactionRestMapper.toDomain(any(), eq(generatedUserId))).thenReturn(mockDomain);
         when(transactionRepository.save(any())).thenReturn(mockDomain);
         when(transactionRestMapper.toDto(any())).thenReturn(mockResponseDto);
 

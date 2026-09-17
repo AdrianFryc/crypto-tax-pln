@@ -9,9 +9,10 @@ import java.util.UUID;
 
 @Component
 public class TransactionRestMapper {
-    public CryptoTransaction toDomain(CreateTransactionRequestDto dto){
+    public CryptoTransaction toDomain(CreateTransactionRequestDto dto, UUID userId){
         return new CryptoTransaction(
                 UUID.randomUUID(),
+                userId,
                 dto.cryptoSymbol(),
                 dto.fiatCurrency(),
                 dto.cryptoAmount(),
