@@ -45,18 +45,19 @@ public class TransactionImportServiceTest {
     @Test
     void shouldImportTransactionsSuccessfully(){
         // Arrange
+        UUID generatedUserId = UUID.randomUUID();
         String fileName = "transactions.csv";
         InputStream inputStream = new ByteArrayInputStream(new byte[0]);
         RawTransactionRow rawTransactionRow = new RawTransactionRow("", new BigDecimal(0), new BigDecimal(0), new BigDecimal(0), new BigDecimal(0),TransactionType.BUY, Instant.now());
-        CryptoTransaction cryptoTransaction = new CryptoTransaction(UUID.randomUUID(), "BTC", "USD", new BigDecimal(1), new BigDecimal(2), new BigDecimal(2), null,TransactionType.BUY, Instant.now());
+        CryptoTransaction cryptoTransaction = new CryptoTransaction(UUID.randomUUID(), generatedUserId,"BTC", "USD", new BigDecimal(1), new BigDecimal(2), new BigDecimal(2), null,TransactionType.BUY, Instant.now());
 
         Mockito.when(transactionFileParser.canParse(fileName)).thenReturn(true);
         Mockito.when(transactionFileParser.parse(inputStream)).thenReturn(List.of(rawTransactionRow));
-        Mockito.when(transactionMapper.map(rawTransactionRow)).thenReturn(Optional.of(cryptoTransaction));
+        Mockito.when(transactionMapper.map(rawTransactionRow, generatedUserId)).thenReturn(Optional.of(cryptoTransaction));
         Mockito.when(transactionRepository.saveAll(List.of(cryptoTransaction)))
                 .thenReturn(List.of(cryptoTransaction));
         // Act
-        List<CryptoTransaction> result = transactionImportService.importTransactions(fileName, inputStream);
+        List<CryptoTransaction> result = transactionImportService.importTransactions(fileName, inputStream, generatedUserId);
         // Assert
         assertThat(result).hasSize(1).containsExactly(cryptoTransaction);
 
@@ -71,7 +72,7 @@ public class TransactionImportServiceTest {
         InputStream inputStream = new ByteArrayInputStream(new byte[0]);
 
         // Act & Assert
-        assertThatThrownBy(() -> transactionImportService.importTransactions(fileName, inputStream))
+        assertThatThrownBy(() -> transactionImportService.importTransactions(fileName, inputStream, UUID.randomUUID()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Unsupported file format");
 

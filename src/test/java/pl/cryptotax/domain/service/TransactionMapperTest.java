@@ -40,7 +40,7 @@ public class TransactionMapperTest {
                 .thenReturn(Optional.of(new ParsedPair("BTC", "USD")));
 
         // WHEN: Wywołanie PRAWDZIWEJ metody testowanej i zapisanie wyniku
-        Optional<CryptoTransaction> result = transactionMapper.map(rawTransactionRow);
+        Optional<CryptoTransaction> result = transactionMapper.map(rawTransactionRow, UUID.randomUUID());
 
         // THEN: Asercje
         assertThat(result).isPresent();
@@ -69,7 +69,7 @@ public class TransactionMapperTest {
 
         Mockito.when(pairParser.parse("BTC/USDD")).thenReturn(Optional.empty());
 
-        Optional<CryptoTransaction> result = transactionMapper.map(rawTransactionRow);
+        Optional<CryptoTransaction> result = transactionMapper.map(rawTransactionRow, UUID.randomUUID());
 
         assertThat(result).isEmpty();
     }
@@ -77,7 +77,7 @@ public class TransactionMapperTest {
     @Test
     void shouldReturnEmptyWhenRawRowIsNull(){
         // given
-        Optional<CryptoTransaction> result = transactionMapper.map(null);
+        Optional<CryptoTransaction> result = transactionMapper.map(null, null);
 
         // then
         assertThat(result).isEmpty();

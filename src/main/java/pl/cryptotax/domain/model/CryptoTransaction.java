@@ -26,6 +26,7 @@ import java.util.UUID;
  */
 
 public record CryptoTransaction(UUID transactionId,
+                                UUID userId,
                                 String cryptoSymbol,
                                 String fiatCurrency,
                                 BigDecimal cryptoAmount,
