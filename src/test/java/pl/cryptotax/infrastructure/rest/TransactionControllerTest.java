@@ -10,7 +10,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.domain.model.TransactionType;
-import pl.cryptotax.domain.port.TransactionRepository;
+import pl.cryptotax.infrastructure.database.repository.TransactionRepository;
 import pl.cryptotax.domain.service.TransactionImportService;
 import pl.cryptotax.infrastructure.rest.dto.TransactionResponseDto;
 import pl.cryptotax.infrastructure.rest.mapper.TransactionRestMapper;

@@ -3,7 +3,7 @@ package pl.cryptotax.application.service;
 import org.springframework.stereotype.Service;
 import pl.cryptotax.domain.exception.InvalidTaxYearException;
 import pl.cryptotax.domain.model.TaxSummary;
-import pl.cryptotax.domain.port.TransactionRepository;
+import pl.cryptotax.infrastructure.database.repository.TransactionRepository;
 import pl.cryptotax.domain.service.TaxCalculationService;
 
 import java.time.LocalDate;
