@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import pl.cryptotax.domain.exception.InvalidTaxYearException;
+import pl.cryptotax.domain.exception.UserAlreadyExistsException;
 import pl.cryptotax.infrastructure.rest.dto.ErrorResponseDto;
 
 import java.time.Instant;
@@ -33,6 +34,18 @@ public class GlobalExceptionHandler {
         var timestamp = Instant.now();
         var status = HttpStatus.BAD_REQUEST.value();
         var error = "Validation failed";
+        var message = ex.getMessage();
+
+        return new ErrorResponseDto(timestamp, status, error, message, path);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponseDto handleUserAlreadyExistsException(UserAlreadyExistsException ex, HttpServletRequest request){
+        var path = request.getRequestURI();
+        var timestamp = Instant.now();
+        var status = HttpStatus.CONFLICT.value();
+        var error = "Validation failed - user already exists";
         var message = ex.getMessage();
 
         return new ErrorResponseDto(timestamp, status, error, message, path);

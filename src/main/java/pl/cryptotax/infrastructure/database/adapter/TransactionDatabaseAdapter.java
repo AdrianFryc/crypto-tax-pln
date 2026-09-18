@@ -2,7 +2,7 @@ package pl.cryptotax.infrastructure.database.adapter;
 
 import org.springframework.stereotype.Repository;
 import pl.cryptotax.domain.model.CryptoTransaction;
-import pl.cryptotax.domain.port.TransactionRepository;
+import pl.cryptotax.infrastructure.database.repository.TransactionRepository;
 import pl.cryptotax.infrastructure.database.entity.TransactionEntity;
 import pl.cryptotax.infrastructure.database.mapper.TransactionEntityMapper;
 import pl.cryptotax.infrastructure.database.repository.TransactionJpaRepository;

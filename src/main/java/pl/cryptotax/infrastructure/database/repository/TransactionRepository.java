@@ -1,7 +1,6 @@
-package pl.cryptotax.domain.port;
+package pl.cryptotax.infrastructure.database.repository;
 
 import pl.cryptotax.domain.model.CryptoTransaction;
-import pl.cryptotax.infrastructure.database.entity.TransactionEntity;
 
 import java.time.Instant;
 import java.util.List;

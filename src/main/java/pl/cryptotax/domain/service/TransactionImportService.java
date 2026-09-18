@@ -3,7 +3,7 @@ package pl.cryptotax.domain.service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.domain.port.TransactionFileParser;
-import pl.cryptotax.domain.port.TransactionRepository;
+import pl.cryptotax.infrastructure.database.repository.TransactionRepository;
 
 import java.io.InputStream;
 import java.util.List;

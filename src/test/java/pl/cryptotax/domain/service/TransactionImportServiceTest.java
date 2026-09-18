@@ -3,7 +3,6 @@ package pl.cryptotax.domain.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,7 +10,7 @@ import pl.cryptotax.domain.model.CryptoTransaction;
 import pl.cryptotax.domain.model.RawTransactionRow;
 import pl.cryptotax.domain.model.TransactionType;
 import pl.cryptotax.domain.port.TransactionFileParser;
-import pl.cryptotax.domain.port.TransactionRepository;
+import pl.cryptotax.infrastructure.database.repository.TransactionRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

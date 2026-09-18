@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pl.cryptotax.domain.port.TransactionRepository;
+import pl.cryptotax.infrastructure.database.repository.TransactionRepository;
 import pl.cryptotax.domain.service.TransactionImportService;
 import pl.cryptotax.infrastructure.rest.dto.CreateTransactionRequestDto;
 import pl.cryptotax.infrastructure.rest.dto.ImportSummaryResponse;
