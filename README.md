@@ -71,7 +71,7 @@ Designed following Clean Architecture, SOLID principles, and REST API standards,
 
     [ ] Test Automation Suite:
 
-        Unit test coverage for services using JUnit 5 and Mockito.
+        [x] Unit test coverage for services using JUnit 5 and Mockito.
 
         Integration tests with real PostgreSQL containers via Testcontainers.
 
