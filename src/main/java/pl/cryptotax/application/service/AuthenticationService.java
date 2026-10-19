@@ -2,6 +2,7 @@ package pl.cryptotax.application.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.cryptotax.domain.exception.InvalidCredentialsException;
 import pl.cryptotax.infrastructure.database.entity.UserEntity;
 import pl.cryptotax.infrastructure.database.repository.UserRepository;
@@ -10,6 +11,7 @@ import pl.cryptotax.infrastructure.rest.dto.LoginRequestDto;
 import pl.cryptotax.infrastructure.security.JwtService;
 
 @Service
+@Transactional(readOnly = true)
 public class AuthenticationService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
